@@ -10,8 +10,8 @@ services:
       - nginx_conf_dir:/etc/nginx/conf.d
       - nginx_html:/usr/share/nginx/html
       - nginx_contrib:/etc/nginx/contrib
-    networks:
-      - sky-take-out
+    network_mode: ${NETWORK_MODE}
+
   mysql:
     image: mysql:8
     environment:
@@ -22,10 +22,10 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ${INIT_SQL}:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - sky-take-out
+    network_mode: ${NETWORK_MODE}
+
 networks:
-  sky-take-out:
+  ${NETWORK_NAME}:
 volumes:
   mysql_data:
   nginx_conf:
