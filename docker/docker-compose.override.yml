@@ -1,7 +1,7 @@
-version: '3.8'
 services:
   nginx:
     volumes:
+      - ../fronted/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
       - ../fronted/nginx/conf:/etc/nginx/conf.d
       - ../fronted/nginx/html:/usr/share/nginx/html
       - ../fronted/nginx/contrib:/etc/nginx/contrib
