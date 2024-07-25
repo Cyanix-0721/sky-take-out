@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  nginx:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.nginx
+    ports:
+      - "80:80"
+    volumes:
+      - nginx_conf:/etc/nginx/conf.d
+      - nginx_html:/usr/share/nginx/html
+      - nginx_contrib:/etc/nginx/contrib
+    networks:
+      - sky-take-out
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ${INIT_SQL}:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - sky-take-out
+networks:
+  sky-take-out:
+volumes:
+  mysql_data:
+  nginx_conf:
+  nginx_html:
+  nginx_contrib:

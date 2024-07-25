@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  nginx:
+    volumes:
+      - ../frontend/nginx/conf:/etc/nginx/conf.d
+      - ../frontend/nginx/html:/usr/share/nginx/html
+      - ../frontend/nginx/contrib:/etc/nginx/contrib
+  mysql:
+    ports:
+      - "3307:3306"
+    volumes:
+      - ../db/init.sql:/docker-entrypoint-initdb.d/init.sql
