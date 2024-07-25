@@ -4,4 +4,6 @@
 *.class
 *Test.java
 **/test/
-docs/
+**/logs/
+*.log
+**/docs/
