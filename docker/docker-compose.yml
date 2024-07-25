@@ -6,10 +6,10 @@ services:
     ports:
       - "80:80"
     volumes:
-      - nginx_conf:/etc/nginx/nginx.conf
-      - nginx_conf_dir:/etc/nginx/conf.d
-      - nginx_html:/usr/share/nginx/html
-      - nginx_contrib:/etc/nginx/contrib
+      - sky_nginx_conf:/etc/nginx/nginx.conf
+      - sky_nginx_conf_dir:/etc/nginx/conf.d
+      - sky_nginx_html:/usr/share/nginx/html
+      - sky_nginx_contrib:/etc/nginx/contrib
     network_mode: ${NETWORK_MODE}
 
   mysql:
@@ -17,18 +17,27 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
     ports:
       - "${MYSQL_PORT}:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - sky_mysql_data:/var/lib/mysql
       - ${INIT_SQL}:/docker-entrypoint-initdb.d/init.sql
-    network_mode: ${NETWORK_MODE}
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+    network_mode: sky-take-out
 
 networks:
-  ${NETWORK_NAME}:
+  sky-take-out:
+    name: sky-take-out
 volumes:
-  mysql_data:
-  nginx_conf:
-  nginx_conf_dir:
-  nginx_html:
-  nginx_contrib:
+  sky_mysql_data:
+    name: sky_mysql_data
+  sky_nginx_conf:
+    name: sky_nginx_conf
+  sky_nginx_conf_dir:
+    name: sky_nginx_conf_dir
+  sky_nginx_html:
+    name: sky_nginx_html
+  sky_nginx_contrib:
+    name: sky_nginx_contrib
