@@ -4,15 +4,20 @@ import com.sky.entity.Employee;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+/**
+ * 员工数据访问对象（DAO）接口
+ * 提供对员工数据的访问方法
+ */
 @Mapper
 public interface EmployeeMapper {
 
-    /**
-     * 根据用户名查询员工
-     * @param username
-     * @return
-     */
-    @Select("select * from employee where username = #{username}")
-    Employee getByUsername(String username);
+	/**
+	 * 根据用户名查询员工
+	 *
+	 * @param username 员工的用户名
+	 * @return 员工实体对象
+	 */
+	@Select("select * from employee where username = #{username}")
+	Employee getByUsername(String username);
 
 }
