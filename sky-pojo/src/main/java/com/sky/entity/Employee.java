@@ -1,5 +1,7 @@
 package com.sky.entity;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,34 +14,47 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel(description = "员工实体类，表示员工的详细信息")
 public class Employee implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private Long id;
+	@ApiModelProperty(value = "员工ID")
+	private Long id;
 
-    private String username;
+	@ApiModelProperty(value = "员工用户名")
+	private String username;
 
-    private String name;
+	@ApiModelProperty(value = "员工姓名")
+	private String name;
 
-    private String password;
+	@ApiModelProperty(value = "员工密码")
+	private String password;
 
-    private String phone;
+	@ApiModelProperty(value = "员工电话")
+	private String phone;
 
-    private String sex;
+	@ApiModelProperty(value = "员工性别")
+	private String sex;
 
-    private String idNumber;
+	@ApiModelProperty(value = "员工身份证号")
+	private String idNumber;
 
-    private Integer status;
+	@ApiModelProperty(value = "员工状态，1表示正常，0表示锁定")
+	private Integer status;
 
-    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createTime;
+	//@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@ApiModelProperty(value = "记录创建时间")
+	private LocalDateTime createTime;
 
-    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateTime;
+	//@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@ApiModelProperty(value = "记录更新时间")
+	private LocalDateTime updateTime;
 
-    private Long createUser;
+	@ApiModelProperty(value = "记录创建人ID")
+	private Long createUser;
 
-    private Long updateUser;
+	@ApiModelProperty(value = "记录更新人ID")
+	private Long updateUser;
 
 }

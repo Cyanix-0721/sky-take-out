@@ -1,22 +1,32 @@
 package com.sky.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
+@ApiModel(description = "员工数据传输对象，表示员工的基本信息")
 public class EmployeeDTO implements Serializable {
 
-    private Long id;
+	private static final long serialVersionUID = 1L;
 
-    private String username;
+	@ApiModelProperty(value = "员工ID")
+	private Long id;
 
-    private String name;
+	@ApiModelProperty(value = "员工用户名")
+	private String username;
 
-    private String phone;
+	@ApiModelProperty(value = "员工姓名")
+	private String name;
 
-    private String sex;
+	@ApiModelProperty(value = "员工电话")
+	private String phone;
 
-    private String idNumber;
+	@ApiModelProperty(value = "员工性别")
+	private String sex;
 
+	@ApiModelProperty(value = "员工身份证号")
+	private String idNumber;
 }
