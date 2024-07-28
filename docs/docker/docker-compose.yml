@@ -23,7 +23,7 @@ services:
     volumes:
       - sky_mysql_data:/var/lib/mysql
       - ${INIT_SQL}:/docker-entrypoint-initdb.d/init.sql
-      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+      - ${MYSQL_CONF}:/etc/mysql/conf.d/my.cnf
     network_mode: sky-take-out
 networks:
   sky-take-out:
