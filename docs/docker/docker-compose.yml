@@ -1,8 +1,8 @@
 services:
   nginx:
     build:
-      context: ..
-      dockerfile: docker/Dockerfile.nginx
+      context: ../..
+      dockerfile: docs/docker/Dockerfile.nginx
     ports:
       - "80:80"
     volumes:
@@ -11,7 +11,6 @@ services:
       - sky_nginx_html:/usr/share/nginx/html
       - sky_nginx_contrib:/etc/nginx/contrib
     network_mode: ${NETWORK_MODE}
-
   mysql:
     image: mysql:8
     environment:
@@ -26,7 +25,6 @@ services:
       - ${INIT_SQL}:/docker-entrypoint-initdb.d/init.sql
       - ./my.cnf:/etc/mysql/conf.d/my.cnf
     network_mode: sky-take-out
-
 networks:
   sky-take-out:
     name: sky-take-out
