@@ -28,6 +28,9 @@ public class User implements Serializable {
 	@ApiModelProperty(value = "用户唯一标识", example = "openid_example")
 	private String openid;
 
+	@ApiModelProperty(value = "状态 0:停用 1:启用", example = "1", allowableValues = "0, 1")
+	private Integer status;
+
 	@ApiModelProperty(value = "姓名", example = "张三")
 	private String name;
 
