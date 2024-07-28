@@ -96,13 +96,30 @@ public class EmployeeController {
 	 *
 	 * @param status 员工账号的状态。1表示启用，0表示禁用。
 	 * @param id     员工的唯一标识符。
-	 * @return       成功启用禁用员工账号的结果对象
+	 * @return 成功启用禁用员工账号的结果对象
 	 */
 	@PostMapping("/status/{status}")
 	@ApiOperation("启用禁用员工账号")
 	public Result<Void> startOrStop(@PathVariable Integer status, Long id) {
 		log.info("启用禁用员工账号：{},{}", status, id);
-		employeeService.startOrStop(status, id);//后绪步骤定义
+		employeeService.startOrStop(status, id);
+		return Result.success();
+	}
+
+	/**
+	 * 编辑员工信息
+	 * <p>
+	 * 该方法用于编辑员工的详细信息。
+	 * 它映射到 PUT HTTP 方法。
+	 *
+	 * @param employeeDTO 包含员工信息的数据传输对象
+	 * @return 成功编辑员工信息的结果对象
+	 */
+	@PutMapping
+	@ApiOperation("编辑员工信息")
+	public Result<Void> update(@RequestBody EmployeeDTO employeeDTO) {
+		log.info("编辑员工信息：{}", employeeDTO);
+		employeeService.update(employeeDTO);
 		return Result.success();
 	}
 
@@ -122,5 +139,21 @@ public class EmployeeController {
 		log.info("员工分页查询，参数为：{}", employeePageQueryDTO);
 		PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO);
 		return Result.success(pageResult);
+	}
+
+	/**
+	 * 根据id查询员工信息
+	 * <p>
+	 * 该方法用于根据员工的唯一标识符查询员工的详细信息。
+	 * 它映射到 GET HTTP 方法和 "/{id}" URL。
+	 *
+	 * @param id 员工的唯一标识符
+	 * @return 包含员工详细信息的 Result 对象
+	 */
+	@GetMapping("/{id}")
+	@ApiOperation("根据id查询员工信息")
+	public Result<Employee> getById(@PathVariable Long id) {
+		Employee employee = employeeService.getById(id);
+		return Result.success(employee);
 	}
 }

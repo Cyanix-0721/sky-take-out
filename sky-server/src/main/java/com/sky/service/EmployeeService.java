@@ -34,6 +34,15 @@ public interface EmployeeService {
 	void startOrStop(Integer status, Long id);
 
 	/**
+	 * 编辑员工信息
+	 * <p>
+	 * 该方法用于编辑员工的详细信息。
+	 *
+	 * @param employeeDTO 包含员工信息的数据传输对象
+	 */
+	void update(EmployeeDTO employeeDTO);
+
+	/**
 	 * 分页查询
 	 * <p>
 	 * 根据提供的分页查询参数，检索员工的分页列表。
@@ -42,4 +51,14 @@ public interface EmployeeService {
 	 * @return 包含员工分页列表的 PageResult 对象
 	 */
 	PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
+
+	/**
+	 * 根据id查询员工
+	 * <p>
+	 * 该方法用于根据员工的唯一标识符查询员工的详细信息。
+	 *
+	 * @param id 员工的唯一标识符
+	 * @return 返回包含员工详细信息的 Employee 对象
+	 */
+	Employee getById(Long id);
 }

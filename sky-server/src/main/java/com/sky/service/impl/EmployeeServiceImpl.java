@@ -118,6 +118,22 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	/**
+	 * 编辑员工信息
+	 *
+	 * @param employeeDTO 包含员工信息的数据传输对象
+	 */
+	public void update(EmployeeDTO employeeDTO) {
+		Employee employee = new Employee();
+		BeanUtils.copyProperties(employeeDTO, employee);
+
+		employee.setUpdateTime(LocalDateTime.now());
+		employee.setUpdateUser(BaseContext.getCurrentId());
+
+		employeeMapper.update(employee);
+	}
+
+
+	/**
 	 * 分页查询
 	 * <p>
 	 * 根据提供的分页查询参数，检索员工的分页列表。
@@ -136,5 +152,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 		List<Employee> records = page.getResult();
 
 		return new PageResult(total, records);
+	}
+
+	/**
+	 * 根据id查询员工
+	 * <p>
+	 * 该方法用于根据员工的唯一标识符查询员工的详细信息。
+	 * 它从数据库中检索员工信息，并将密码字段设置为"****"以隐藏实际密码。
+	 *
+	 * @param id 员工的唯一标识符
+	 * @return 返回包含员工详细信息的 Employee 对象
+	 */
+	public Employee getById(Long id) {
+		Employee employee = employeeMapper.getById(id);
+		employee.setPassword("****");
+		return employee;
 	}
 }

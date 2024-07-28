@@ -13,14 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface EmployeeMapper {
 
 	/**
-	 * 根据用户名查询员工
-	 *
-	 * @param username 员工的用户名
-	 * @return 员工实体对象
-	 */
-	Employee getByUsername(String username);
-
-	/**
 	 * 插入员工数据
 	 *
 	 * @param employee 员工对象
@@ -43,4 +35,23 @@ public interface EmployeeMapper {
 	 * @return 包含员工分页列表的 Page 对象
 	 */
 	Page<Employee> pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
+
+	/**
+	 * 根据id查询员工信息
+	 * <p>
+	 * 该方法用于根据员工的唯一标识符查询员工的详细信息。
+	 *
+	 * @param id 员工的唯一标识符
+	 * @return 返回包含员工详细信息的 Employee 对象
+	 */
+	Employee getById(Long id);
+
+	/**
+	 * 根据用户名查询员工
+	 *
+	 * @param username 员工的用户名
+	 * @return 员工实体对象
+	 */
+	Employee getByUsername(String username);
+
 }
