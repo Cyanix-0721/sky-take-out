@@ -3,6 +3,7 @@ package com.sky.service.impl;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.entity.Employee;
@@ -76,7 +77,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		// 设置账号的状态，默认正常状态 1表示正常 0表示锁定
 		employee.setStatus(StatusConstant.ENABLE);
 
-		// 设置密码，默认密码123456
+		// 设置密码，默认密码 123456 MD5加密=> e10adc3949ba59abbe56e057f20f883e
 		employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
 
 		// 设置当前记录的创建时间和修改时间
@@ -84,10 +85,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 		employee.setUpdateTime(LocalDateTime.now());
 
 		// 设置当前记录创建人id和修改人id
-		employee.setCreateUser(10L); // 目前写个假数据，后期修改
-		employee.setUpdateUser(10L);
+		employee.setCreateUser(BaseContext.getCurrentId());
+		employee.setUpdateUser(BaseContext.getCurrentId());
 
 		// 插入员工记录到数据库
-		employeeMapper.insert(employee); // 后续步骤定义
+		employeeMapper.insert(employee);
 	}
 }

@@ -48,6 +48,11 @@ public class JwtUtil {
 	 * @return 解密后的Claims对象
 	 */
 	public static Claims parseJWT(String secretKey, String token) {
+
+		// 检查是否有"Bearer "前缀，有则移除
+		if (token != null && token.startsWith("Bearer ")) {
+			token = token.substring(7);
+		}
 		// 得到DefaultJwtParser
 		return Jwts.parser()
 				// 设置签名的秘钥
