@@ -1,7 +1,7 @@
 package com.sky.service.impl;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
@@ -45,7 +45,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		String password = employeeLoginDTO.getPassword();
 
 		// 1、根据用户名查询数据库中的数据
-		Employee employee = employeeMapper.getByUsername(username);
+		Employee employee = employeeMapper.selectOne(new QueryWrapper<Employee>().eq("username", username));
 
 		// 2、处理各种异常情况（用户名不存在、密码不对、账号被锁定）
 		if (employee == null) {
@@ -114,7 +114,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 				.build();
 
 		// 更新员工信息
-		employeeMapper.update(employee);
+		employeeMapper.updateById(employee);
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		employee.setUpdateTime(LocalDateTime.now());
 		employee.setUpdateUser(BaseContext.getCurrentId());
 
-		employeeMapper.update(employee);
+		employeeMapper.updateById(employee);
 	}
 
 
@@ -142,15 +142,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * @return 包含员工分页列表的 PageResult 对象
 	 */
 	public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
-		// select * from employee limit 0,10
-		// 开始分页查询
-		PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
+		// 创建分页对象
+		Page<Employee> page = new Page<>(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
 
-		Page<Employee> page = employeeMapper.pageQuery(employeePageQueryDTO); // 后续定义
+		// 执行分页查询
+		Page<Employee> resultPage = employeeMapper.selectPage(page, new QueryWrapper<Employee>()
+				.like(employeePageQueryDTO.getName() != null && !employeePageQueryDTO.getName().isEmpty(), "name", employeePageQueryDTO.getName())
+				.orderByDesc("create_time"));
 
-		long total = page.getTotal();
-		List<Employee> records = page.getResult();
+		// 获取总记录数和员工列表
+		long total = resultPage.getTotal();
+		List<Employee> records = resultPage.getRecords();
 
+		// 返回分页结果
 		return new PageResult(total, records);
 	}
 
@@ -164,7 +168,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * @return 返回包含员工详细信息的 Employee 对象
 	 */
 	public Employee getById(Long id) {
-		Employee employee = employeeMapper.getById(id);
+		Employee employee = employeeMapper.selectById(id);
 		employee.setPassword("****");
 		return employee;
 	}

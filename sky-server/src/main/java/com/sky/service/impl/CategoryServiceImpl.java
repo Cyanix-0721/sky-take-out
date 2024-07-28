@@ -1,13 +1,15 @@
 package com.sky.service.impl;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
+import com.sky.entity.Dish;
+import com.sky.entity.Setmeal;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.CategoryMapper;
 import com.sky.mapper.DishMapper;
@@ -69,16 +71,16 @@ public class CategoryServiceImpl implements CategoryService {
 	 */
 	public void deleteById(Long id) {
 		// 查询当前分类是否关联了菜品，如果关联了就抛出业务异常
-		Integer count = dishMapper.countByCategoryId(id);
+		Long count = dishMapper.selectCount(new QueryWrapper<Dish>().eq("category_id", id));
 		if (count > 0) {
 			// 当前分类下有菜品，不能删除
 			throw new DeletionNotAllowedException(MessageConstant.CATEGORY_BE_RELATED_BY_DISH);
 		}
 
 		// 查询当前分类是否关联了套餐，如果关联了就抛出业务异常
-		count = setmealMapper.countByCategoryId(id);
+		count = setmealMapper.selectCount(new QueryWrapper<Setmeal>().eq("category_id", id));
 		if (count > 0) {
-			// 当前分类下有菜品，不能删除
+			// 当前分类下有套餐，不能删除
 			throw new DeletionNotAllowedException(MessageConstant.CATEGORY_BE_RELATED_BY_SETMEAL);
 		}
 
@@ -101,7 +103,7 @@ public class CategoryServiceImpl implements CategoryService {
 				.updateTime(LocalDateTime.now())
 				.updateUser(BaseContext.getCurrentId())
 				.build();
-		categoryMapper.update(category);
+		categoryMapper.updateById(category);
 	}
 
 	/**
@@ -119,7 +121,7 @@ public class CategoryServiceImpl implements CategoryService {
 		category.setUpdateTime(LocalDateTime.now());
 		category.setUpdateUser(BaseContext.getCurrentId());
 
-		categoryMapper.update(category);
+		categoryMapper.updateById(category);
 	}
 
 	/**
@@ -131,10 +133,22 @@ public class CategoryServiceImpl implements CategoryService {
 	 * @return 返回分页查询结果
 	 */
 	public PageResult pageQuery(CategoryPageQueryDTO categoryPageQueryDTO) {
-		PageHelper.startPage(categoryPageQueryDTO.getPage(), categoryPageQueryDTO.getPageSize());
-		// 下一条sql进行分页，自动加入limit关键字分页
-		Page<Category> page = categoryMapper.pageQuery(categoryPageQueryDTO);
-		return new PageResult(page.getTotal(), page.getResult());
+		// 创建分页对象
+		Page<Category> page = new Page<>(categoryPageQueryDTO.getPage(), categoryPageQueryDTO.getPageSize());
+
+		// 执行分页查询
+		Page<Category> resultPage = categoryMapper.selectPage(page, new QueryWrapper<Category>()
+				.like(categoryPageQueryDTO.getName() != null && !categoryPageQueryDTO.getName().isEmpty(), "name", categoryPageQueryDTO.getName())
+				.eq(categoryPageQueryDTO.getType() != null, "type", categoryPageQueryDTO.getType())
+				.orderByAsc("sort")
+				.orderByDesc("create_time"));
+
+		// 获取总记录数和分类列表
+		long total = resultPage.getTotal();
+		List<Category> records = resultPage.getRecords();
+
+		// 返回分页结果
+		return new PageResult(total, records);
 	}
 
 	/**
@@ -146,6 +160,11 @@ public class CategoryServiceImpl implements CategoryService {
 	 * @return 返回分类信息列表
 	 */
 	public List<Category> list(Integer type) {
-		return categoryMapper.list(type);
+		QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq(type != null, "type", type);
+		queryWrapper.eq("status", 1); // 确保只查询状态为启用的分类
+		queryWrapper.orderByAsc("sort").orderByDesc("create_time");
+
+		return categoryMapper.selectList(queryWrapper);
 	}
 }

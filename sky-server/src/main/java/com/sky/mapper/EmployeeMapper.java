@@ -1,7 +1,6 @@
 package com.sky.mapper;
 
-import com.github.pagehelper.Page;
-import com.sky.dto.EmployeePageQueryDTO;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.sky.entity.Employee;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,48 +9,5 @@ import org.apache.ibatis.annotations.Mapper;
  * 提供对员工数据的访问方法
  */
 @Mapper
-public interface EmployeeMapper {
-
-	/**
-	 * 插入员工数据
-	 *
-	 * @param employee 员工对象
-	 */
-	void insert(Employee employee);
-
-	/**
-	 * 根据主键动态修改属性
-	 *
-	 * @param employee 员工对象
-	 */
-	void update(Employee employee);
-
-	/**
-	 * 分页查询
-	 * <p>
-	 * 根据提供的分页查询参数，检索员工的分页列表。
-	 *
-	 * @param employeePageQueryDTO 包含分页查询参数的数据传输对象
-	 * @return 包含员工分页列表的 Page 对象
-	 */
-	Page<Employee> pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
-
-	/**
-	 * 根据id查询员工信息
-	 * <p>
-	 * 该方法用于根据员工的唯一标识符查询员工的详细信息。
-	 *
-	 * @param id 员工的唯一标识符
-	 * @return 返回包含员工详细信息的 Employee 对象
-	 */
-	Employee getById(Long id);
-
-	/**
-	 * 根据用户名查询员工
-	 *
-	 * @param username 员工的用户名
-	 * @return 员工实体对象
-	 */
-	Employee getByUsername(String username);
-
+public interface EmployeeMapper extends BaseMapper<Employee> {
 }
