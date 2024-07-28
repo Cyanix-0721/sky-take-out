@@ -92,6 +92,21 @@ public class EmployeeController {
 	}
 
 	/**
+	 * 启用禁用员工账号
+	 *
+	 * @param status 员工账号的状态。1表示启用，0表示禁用。
+	 * @param id     员工的唯一标识符。
+	 * @return       成功启用禁用员工账号的结果对象
+	 */
+	@PostMapping("/status/{status}")
+	@ApiOperation("启用禁用员工账号")
+	public Result<Void> startOrStop(@PathVariable Integer status, Long id) {
+		log.info("启用禁用员工账号：{},{}", status, id);
+		employeeService.startOrStop(status, id);//后绪步骤定义
+		return Result.success();
+	}
+
+	/**
 	 * 员工分页查询
 	 * <p>
 	 * 该方法映射到 GET HTTP 方法和 "/page" URL。

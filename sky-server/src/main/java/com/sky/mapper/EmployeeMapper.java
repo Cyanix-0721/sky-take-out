@@ -28,6 +28,13 @@ public interface EmployeeMapper {
 	void insert(Employee employee);
 
 	/**
+	 * 根据主键动态修改属性
+	 *
+	 * @param employee 员工对象
+	 */
+	void update(Employee employee);
+
+	/**
 	 * 分页查询
 	 * <p>
 	 * 根据提供的分页查询参数，检索员工的分页列表。
