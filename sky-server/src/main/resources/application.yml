@@ -30,6 +30,20 @@ logging:
         service: info
         controller: info
 
+knife4j:
+  enable: true
+  openapi:
+    title: 苍穹外卖项目接口文档
+    description: "苍穹外卖项目接口文档"
+    concat: 我
+    version: v2.0
+    group:
+      sky:
+        group-name: sky
+        api-rule: package
+        api-rule-resources:
+          - com.sky.controller
+
 sky:
   jwt:
     # 设置jwt签名加密时使用的秘钥

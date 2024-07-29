@@ -23,7 +23,7 @@
         <commons.lang>2.6</commons.lang>
         <mybatis-plus>3.5.7</mybatis-plus>
         <aliyun.sdk.oss>3.10.2</aliyun.sdk.oss>
-        <knife4j>3.0.2</knife4j>
+        <knife4j>4.5.0</knife4j>
         <aspectj>1.9.4</aspectj>
         <jjwt>0.9.1</jjwt>
         <jaxb-api>2.3.1</jaxb-api>
@@ -63,7 +63,7 @@
 
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <artifactId>knife4j-openapi2-spring-boot-starter</artifactId>
                 <version>${knife4j}</version>
             </dependency>
 
