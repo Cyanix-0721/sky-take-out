@@ -1,5 +1,6 @@
 package com.sky.entity;
 
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -52,4 +53,7 @@ public class ShoppingCart implements Serializable {
 
 	@ApiModelProperty(value = "创建时间", example = "2023-01-01T12:00:00")
 	private LocalDateTime createTime;
+
+	@Version
+	private Integer version;
 }

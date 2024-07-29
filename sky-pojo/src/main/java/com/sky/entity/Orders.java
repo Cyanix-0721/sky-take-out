@@ -1,5 +1,6 @@
 package com.sky.entity;
 
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -113,4 +114,7 @@ public class Orders implements Serializable {
 
 	@ApiModelProperty(value = "餐具数量状态 1按餐量提供 0选择具体数量", example = "1", allowableValues = "0, 1")
 	private Integer tablewareStatus;
+
+	@Version
+	private Integer version;
 }

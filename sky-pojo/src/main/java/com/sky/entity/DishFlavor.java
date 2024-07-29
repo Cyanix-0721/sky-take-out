@@ -1,5 +1,6 @@
 package com.sky.entity;
 
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -32,4 +33,7 @@ public class DishFlavor implements Serializable {
 
 	@ApiModelProperty(value = "口味数据列表", example = "['微辣', '中辣', '重辣']")
 	private String value;
+
+	@Version
+	private Integer version;
 }

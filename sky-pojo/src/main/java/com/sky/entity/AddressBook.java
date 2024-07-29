@@ -1,5 +1,6 @@
 package com.sky.entity;
 
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -62,4 +63,7 @@ public class AddressBook implements Serializable {
 
 	@ApiModelProperty(value = "是否默认 0否 1是", example = "1", allowableValues = "0, 1")
 	private Integer isDefault;
+
+	@Version
+	private Integer version;
 }

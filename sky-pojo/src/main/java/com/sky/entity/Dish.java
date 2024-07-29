@@ -1,5 +1,6 @@
 package com.sky.entity;
 
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -55,4 +56,7 @@ public class Dish implements Serializable {
 
 	@ApiModelProperty(value = "修改人ID", example = "1")
 	private Long updateUser;
+
+	@Version
+	private Integer version;
 }

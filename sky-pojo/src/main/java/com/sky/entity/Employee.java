@@ -1,5 +1,6 @@
 package com.sky.entity;
 
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -56,5 +57,8 @@ public class Employee implements Serializable {
 
 	@ApiModelProperty(value = "记录更新人ID")
 	private Long updateUser;
+
+	@Version
+	private Integer version;
 
 }

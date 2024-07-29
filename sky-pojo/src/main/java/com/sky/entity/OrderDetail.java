@@ -1,5 +1,6 @@
 package com.sky.entity;
 
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -48,4 +49,7 @@ public class OrderDetail implements Serializable {
 
 	@ApiModelProperty(value = "图片", example = "image_url")
 	private String image;
+
+	@Version
+	private Integer version;
 }

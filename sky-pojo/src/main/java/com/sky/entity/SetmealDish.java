@@ -1,5 +1,6 @@
 package com.sky.entity;
 
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -39,4 +40,7 @@ public class SetmealDish implements Serializable {
 
 	@ApiModelProperty(value = "份数", example = "2")
 	private Integer copies;
+
+	@Version
+	private Integer version;
 }
