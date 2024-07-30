@@ -11,3 +11,5 @@
 !/docs/
 **/application-dev.yaml
 **/application-dev.yml
+**/application-prod.yaml
+**/application-prod.yml
