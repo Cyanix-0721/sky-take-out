@@ -1,5 +1,7 @@
 package com.sky.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -45,15 +47,19 @@ public class Setmeal implements Serializable {
 	@ApiModelProperty(value = "图片", example = "image_url")
 	private String image;
 
+	@TableField(fill = FieldFill.INSERT)
 	@ApiModelProperty(value = "创建时间", example = "2023-01-01T12:00:00")
 	private LocalDateTime createTime;
 
+	@TableField(fill = FieldFill.INSERT_UPDATE)
 	@ApiModelProperty(value = "更新时间", example = "2023-01-01T12:00:00")
 	private LocalDateTime updateTime;
 
+	@TableField(fill = FieldFill.INSERT)
 	@ApiModelProperty(value = "创建人ID", example = "1")
 	private Long createUser;
 
+	@TableField(fill = FieldFill.INSERT_UPDATE)
 	@ApiModelProperty(value = "修改人ID", example = "1")
 	private Long updateUser;
 

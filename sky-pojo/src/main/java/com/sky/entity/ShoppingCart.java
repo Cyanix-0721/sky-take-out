@@ -1,5 +1,7 @@
 package com.sky.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -51,6 +53,7 @@ public class ShoppingCart implements Serializable {
 	@ApiModelProperty(value = "图片", example = "image_url")
 	private String image;
 
+	@TableField(fill = FieldFill.INSERT)
 	@ApiModelProperty(value = "创建时间", example = "2023-01-01T12:00:00")
 	private LocalDateTime createTime;
 
