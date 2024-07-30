@@ -86,11 +86,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		// 设置密码，默认密码 123456 MD5加密=> e10adc3949ba59abbe56e057f20f883e
 		employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
 
-		// 设置当前记录的创建时间和修改时间
+		// 设置当前记录的创建时间/修改时间/创建人id/修改人id
 		employee.setCreateTime(LocalDateTime.now());
 		employee.setUpdateTime(LocalDateTime.now());
-
-		// 设置当前记录创建人id和修改人id
 		employee.setCreateUser(BaseContext.getCurrentId());
 		employee.setUpdateUser(BaseContext.getCurrentId());
 
@@ -109,11 +107,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public void startOrStop(Integer status, Long id) {
 		// 创建一个新的Employee对象，并设置其状态和ID
 		Employee employee = Employee.builder()
-				.status(status)
 				.id(id)
+				.status(status)
+				.updateTime(LocalDateTime.now())
+				.updateUser(BaseContext.getCurrentId())
 				.build();
-
-		// 更新员工信息
+		
 		employeeMapper.updateById(employee);
 	}
 
