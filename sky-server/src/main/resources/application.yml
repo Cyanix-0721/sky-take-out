@@ -2,10 +2,13 @@ server:
   port: 8080
 
 spring:
+  application:
+      name: sky-take-out
   profiles:
     active: dev
   main:
     allow-circular-references: true
+    banner-mode: off
   datasource:
     driver-class-name: ${sky.datasource.driver-class-name}
     url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
@@ -22,6 +25,7 @@ mybatis-plus:
       id-type: auto # 主键类型
       logic-delete-value: 0 # 逻辑删除值
       logic-not-delete-value: 1 # 逻辑未删除值
+    banner: off # 是否打印mybatis-plus的banner
 logging:
   level:
     com:
