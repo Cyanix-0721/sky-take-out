@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
-import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
@@ -21,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -87,10 +85,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 		employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
 
 		// 设置当前记录的创建时间/修改时间/创建人id/修改人id
-		employee.setCreateTime(LocalDateTime.now());
-		employee.setUpdateTime(LocalDateTime.now());
-		employee.setCreateUser(BaseContext.getCurrentId());
-		employee.setUpdateUser(BaseContext.getCurrentId());
+//		employee.setCreateTime(LocalDateTime.now());
+//		employee.setUpdateTime(LocalDateTime.now());
+//		employee.setCreateUser(BaseContext.getCurrentId());
+//		employee.setUpdateUser(BaseContext.getCurrentId());
 
 		// 插入员工记录到数据库
 		employeeMapper.insert(employee);
@@ -109,10 +107,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Employee employee = Employee.builder()
 				.id(id)
 				.status(status)
-				.updateTime(LocalDateTime.now())
-				.updateUser(BaseContext.getCurrentId())
+//				.updateTime(LocalDateTime.now())
+//				.updateUser(BaseContext.getCurrentId())
 				.build();
-		
+
 		employeeMapper.updateById(employee);
 	}
 
@@ -125,8 +123,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Employee employee = new Employee();
 		BeanUtils.copyProperties(employeeDTO, employee);
 
-		employee.setUpdateTime(LocalDateTime.now());
-		employee.setUpdateUser(BaseContext.getCurrentId());
+//		employee.setUpdateTime(LocalDateTime.now());
+//		employee.setUpdateUser(BaseContext.getCurrentId());
 
 		employeeMapper.updateById(employee);
 	}

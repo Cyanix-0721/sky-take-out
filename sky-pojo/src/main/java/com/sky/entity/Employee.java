@@ -1,5 +1,7 @@
 package com.sky.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -46,19 +48,22 @@ public class Employee implements Serializable {
 
 	//@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@ApiModelProperty(value = "记录创建时间")
+	@TableField(fill = FieldFill.INSERT)
 	private LocalDateTime createTime;
 
 	//@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@ApiModelProperty(value = "记录更新时间")
+	@TableField(fill = FieldFill.INSERT_UPDATE)
 	private LocalDateTime updateTime;
 
 	@ApiModelProperty(value = "记录创建人ID")
+	@TableField(fill = FieldFill.INSERT)
 	private Long createUser;
 
 	@ApiModelProperty(value = "记录更新人ID")
+	@TableField(fill = FieldFill.INSERT_UPDATE)
 	private Long updateUser;
 
 	@Version
 	private Integer version;
-
 }

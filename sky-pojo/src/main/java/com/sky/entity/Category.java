@@ -1,5 +1,7 @@
 package com.sky.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -35,18 +37,22 @@ public class Category implements Serializable {
 	@ApiModelProperty(value = "分类状态 0标识禁用 1表示启用", example = "1", allowableValues = "0, 1")
 	private Integer status;
 
+	@TableField(fill = FieldFill.INSERT)
 	@ApiModelProperty(value = "创建时间", example = "2023-01-01T12:00:00")
 	private LocalDateTime createTime;
 
+	@TableField(fill = FieldFill.INSERT_UPDATE)
 	@ApiModelProperty(value = "更新时间", example = "2023-01-01T12:00:00")
 	private LocalDateTime updateTime;
 
+	@TableField(fill = FieldFill.INSERT)
 	@ApiModelProperty(value = "创建人ID", example = "1")
 	private Long createUser;
 
+	@TableField(fill = FieldFill.INSERT_UPDATE)
 	@ApiModelProperty(value = "修改人ID", example = "1")
 	private Long updateUser;
-	
+
 	@Version
 	private Integer version;
 }
