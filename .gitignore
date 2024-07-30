@@ -9,3 +9,5 @@
 *.log
 **/docs/
 !/docs/
+**/application-dev.yaml
+**/application-dev.yml
