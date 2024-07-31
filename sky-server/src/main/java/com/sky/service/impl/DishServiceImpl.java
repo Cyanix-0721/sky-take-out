@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,6 +46,7 @@ public class DishServiceImpl implements DishService {
 	 *
 	 * @param dishDTO 包含菜品和口味信息的数据传输对象
 	 */
+	@Override
 	@Transactional
 	public void saveWithFlavor(DishDTO dishDTO) {
 
@@ -70,6 +72,7 @@ public class DishServiceImpl implements DishService {
 	 *
 	 * @param ids 包含要删除的菜品ID列表
 	 */
+	@Override
 	@Transactional
 	public void deleteBatch(List<Long> ids) {
 		// 判断当前菜品是否能够删除---是否存在起售中的菜品
@@ -103,6 +106,33 @@ public class DishServiceImpl implements DishService {
 	}
 
 	/**
+	 * 根据id修改菜品基本信息和对应的口味信息
+	 *
+	 * @param dishDTO 包含菜品和口味信息的数据传输对象
+	 */
+	@Override
+	public void updateWithFlavor(DishDTO dishDTO) {
+		Dish dish = new Dish();
+		BeanUtils.copyProperties(dishDTO, dish);
+
+		// 修改菜品表基本信息
+		dishMapper.updateById(dish);
+
+		// 删除原有的口味数据
+		dishFlavorMapper.delete(
+				new LambdaQueryWrapper<DishFlavor>().eq(DishFlavor::getDishId, dishDTO.getId())
+		);
+
+		// 重新插入口味数据
+		Optional.ofNullable(dishDTO.getFlavors())
+				.filter(flavors -> !flavors.isEmpty())
+				.ifPresent(flavors -> {
+					flavors.forEach(dishFlavor -> dishFlavor.setDishId(dishDTO.getId()));
+					dishFlavorMapper.insert(flavors);
+				});
+	}
+
+	/**
 	 * 菜品分页查询
 	 * <p>
 	 * 该方法用于分页查询菜品信息。
@@ -110,6 +140,7 @@ public class DishServiceImpl implements DishService {
 	 * @param dishPageQueryDTO 包含分页查询条件的数据传输对象
 	 * @return 返回包含分页结果的操作结果
 	 */
+	@Override
 	public PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO) {
 		// 创建分页对象
 		Page<Dish> page = new Page<>(dishPageQueryDTO.getPage(), dishPageQueryDTO.getPageSize());
@@ -133,5 +164,26 @@ public class DishServiceImpl implements DishService {
 
 		// 返回分页结果
 		return new PageResult(resultPage.getTotal(), dishVOList);
+	}
+
+	/**
+	 * 根据id查询菜品对应的口味数据
+	 * <p>
+	 * 该方法用于根据给定的菜品ID查询菜品及其对应的口味信息。
+	 *
+	 * @param id 菜品ID
+	 * @return 返回包含菜品及其口味信息的操作结果
+	 */
+	@Override
+	public DishVO getByIdWithFlavor(Long id) {
+		Dish dish = dishMapper.selectById(id);
+		List<DishFlavor> dishFlavors = dishFlavorMapper.selectList(
+				new LambdaQueryWrapper<DishFlavor>().eq(DishFlavor::getDishId, id)
+		);
+
+		return new DishVO() {{
+			BeanUtils.copyProperties(dish, this);
+			setFlavors(dishFlavors);
+		}};
 	}
 }

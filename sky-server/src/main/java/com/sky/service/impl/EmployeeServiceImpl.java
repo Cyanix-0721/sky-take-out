@@ -37,6 +37,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * @throws PasswordErrorException   如果密码错误
 	 * @throws AccountLockedException   如果账号被锁定
 	 */
+	@Override
 	public Employee login(EmployeeLoginDTO employeeLoginDTO) {
 		// 获取用户名和密码
 		String username = employeeLoginDTO.getUsername();
@@ -72,6 +73,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 *
 	 * @param employeeDTO 包含员工信息的数据传输对象
 	 */
+	@Override
 	public void save(EmployeeDTO employeeDTO) {
 		Employee employee = new Employee();
 
@@ -102,6 +104,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * @param status 员工账号的状态。1表示启用，0表示禁用。
 	 * @param id     员工的唯一标识符。
 	 */
+	@Override
 	public void startOrStop(Integer status, Long id) {
 		// 创建一个新的Employee对象，并设置其状态和ID
 		Employee employee = Employee.builder()
@@ -119,6 +122,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 *
 	 * @param employeeDTO 包含员工信息的数据传输对象
 	 */
+	@Override
 	public void update(EmployeeDTO employeeDTO) {
 		Employee employee = new Employee();
 		BeanUtils.copyProperties(employeeDTO, employee);
@@ -138,6 +142,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * @param employeePageQueryDTO 包含分页查询参数的数据传输对象
 	 * @return 包含员工分页列表的 PageResult 对象
 	 */
+	@Override
 	public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
 		// 创建分页对象
 		Page<Employee> page = new Page<>(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
@@ -164,6 +169,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * @param id 员工的唯一标识符
 	 * @return 返回包含员工详细信息的 Employee 对象
 	 */
+	@Override
 	public Employee getById(Long id) {
 		Employee employee = employeeMapper.selectById(id);
 		employee.setPassword("****");

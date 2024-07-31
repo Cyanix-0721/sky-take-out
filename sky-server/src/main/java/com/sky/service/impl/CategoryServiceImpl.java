@@ -43,6 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
 	 *
 	 * @param categoryDTO 包含分类信息的数据传输对象
 	 */
+	@Override
 	public void save(CategoryDTO categoryDTO) {
 		Category category = new Category();
 		// 属性拷贝
@@ -67,6 +68,7 @@ public class CategoryServiceImpl implements CategoryService {
 	 *
 	 * @param id 分类的唯一标识符
 	 */
+	@Override
 	public void deleteById(Long id) {
 		// 查询当前分类是否关联了菜品，如果关联了就抛出业务异常
 		Long count = dishMapper.selectCount(new QueryWrapper<Dish>().eq("category_id", id));
@@ -94,6 +96,7 @@ public class CategoryServiceImpl implements CategoryService {
 	 * @param status 分类的状态（启用或禁用）
 	 * @param id     分类的唯一标识符
 	 */
+	@Override
 	public void startOrStop(Integer status, Long id) {
 		Category category = Category.builder()
 				.id(id)
@@ -112,6 +115,7 @@ public class CategoryServiceImpl implements CategoryService {
 	 *
 	 * @param categoryDTO 包含分类信息的数据传输对象
 	 */
+	@Override
 	public void update(CategoryDTO categoryDTO) {
 		Category category = new Category();
 		BeanUtils.copyProperties(categoryDTO, category);
@@ -131,6 +135,7 @@ public class CategoryServiceImpl implements CategoryService {
 	 * @param categoryPageQueryDTO 包含分页查询参数的数据传输对象
 	 * @return 返回分页查询结果
 	 */
+	@Override
 	public PageResult pageQuery(CategoryPageQueryDTO categoryPageQueryDTO) {
 		// 创建分页对象
 		Page<Category> page = new Page<>(categoryPageQueryDTO.getPage(), categoryPageQueryDTO.getPageSize());
@@ -158,6 +163,7 @@ public class CategoryServiceImpl implements CategoryService {
 	 * @param type 分类的类型
 	 * @return 返回分类信息列表
 	 */
+	@Override
 	public List<Category> list(Integer type) {
 		QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq(type != null, "type", type);

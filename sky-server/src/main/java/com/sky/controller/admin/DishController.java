@@ -5,6 +5,7 @@ import com.sky.dto.DishPageQueryDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
+import com.sky.vo.DishVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class DishController {
 	@ApiOperation("新增菜品")
 	public Result<Void> save(@RequestBody DishDTO dishDTO) {
 		log.info("新增菜品：{}", dishDTO);
-		dishService.saveWithFlavor(dishDTO); // 后续步骤开发
+		dishService.saveWithFlavor(dishDTO);
 		return Result.success();
 	}
 
@@ -53,7 +54,23 @@ public class DishController {
 	@ApiOperation("菜品批量删除")
 	public Result<Void> delete(@RequestParam List<Long> ids) {
 		log.info("菜品批量删除：{}", ids);
-		dishService.deleteBatch(ids); // 后续步骤实现
+		dishService.deleteBatch(ids);
+		return Result.success();
+	}
+
+	/**
+	 * 修改菜品
+	 * <p>
+	 * 该方法用于修改菜品信息。
+	 *
+	 * @param dishDTO 包含菜品信息的数据传输对象
+	 * @return 返回操作结果
+	 */
+	@PutMapping
+	@ApiOperation("修改菜品")
+	public Result<Void> update(@RequestBody DishDTO dishDTO) {
+		log.info("修改菜品：{}", dishDTO);
+		dishService.updateWithFlavor(dishDTO);
 		return Result.success();
 	}
 
@@ -69,7 +86,23 @@ public class DishController {
 	@ApiOperation("菜品分页查询")
 	public Result<PageResult> page(DishPageQueryDTO dishPageQueryDTO) {
 		log.info("菜品分页查询:{}", dishPageQueryDTO);
-		PageResult pageResult = dishService.pageQuery(dishPageQueryDTO); // 后续步骤定义
+		PageResult pageResult = dishService.pageQuery(dishPageQueryDTO);
 		return Result.success(pageResult);
+	}
+
+	/**
+	 * 根据id查询菜品
+	 * <p>
+	 * 该方法用于根据给定的菜品ID查询菜品信息。
+	 *
+	 * @param id 菜品ID
+	 * @return 返回包含菜品信息的操作结果
+	 */
+	@GetMapping("/{id}")
+	@ApiOperation("根据id查询菜品")
+	public Result<DishVO> getById(@PathVariable Long id) {
+		log.info("根据id查询菜品：{}", id);
+		DishVO dishVO = dishService.getByIdWithFlavor(id);
+		return Result.success(dishVO);
 	}
 }
