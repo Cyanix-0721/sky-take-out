@@ -8,11 +8,13 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
@@ -36,6 +38,8 @@ public class DishServiceImpl implements DishService {
 	private DishFlavorMapper dishFlavorMapper;
 	@Autowired
 	private SetmealDishMapper setmealDishMapper;
+	@Autowired
+	private SetmealMapper setmealMapper;
 
 	/**
 	 * 新增菜品和对应的口味
@@ -49,22 +53,17 @@ public class DishServiceImpl implements DishService {
 	@Override
 	@Transactional
 	public void saveWithFlavor(DishDTO dishDTO) {
-
 		Dish dish = new Dish();
 		BeanUtils.copyProperties(dishDTO, dish);
 
-		// 向菜品表插入1条数据
 		dishMapper.insert(dish);
 
-		// 获取insert语句生成的主键值
-		Long dishId = dish.getId();
-
-		List<DishFlavor> flavors = dishDTO.getFlavors();
-		if (flavors != null && !flavors.isEmpty()) {
-			flavors.forEach(dishFlavor -> dishFlavor.setDishId(dishId));
-			// 向口味表插入n条数据
-			dishFlavorMapper.insert(flavors);
-		}
+		Optional.ofNullable(dishDTO.getFlavors())
+				.filter(flavors -> ! flavors.isEmpty())
+				.ifPresent(flavors -> {
+					flavors.forEach(dishFlavor -> dishFlavor.setDishId(dish.getId()));
+					dishFlavorMapper.insert(flavors);
+				});
 	}
 
 	/**
@@ -93,7 +92,7 @@ public class DishServiceImpl implements DishService {
 				.map(SetmealDish::getSetmealId) // 获取套餐ID
 				.distinct()
 				.collect(Collectors.toList()); //如果为空，返回空列表
-		if (!setmealIds.isEmpty()) {
+		if (! setmealIds.isEmpty()) {
 			// 当前菜品被套餐关联了，不能删除
 			throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
 		}
@@ -118,18 +117,62 @@ public class DishServiceImpl implements DishService {
 		// 修改菜品表基本信息
 		dishMapper.updateById(dish);
 
+		// 获取菜品ID
+		Long dishId = dishDTO.getId();
+
 		// 删除原有的口味数据
-		dishFlavorMapper.delete(
-				new LambdaQueryWrapper<DishFlavor>().eq(DishFlavor::getDishId, dishDTO.getId())
-		);
+		dishFlavorMapper.delete(new LambdaQueryWrapper<DishFlavor>().eq(DishFlavor::getDishId, dishId));
 
 		// 重新插入口味数据
 		Optional.ofNullable(dishDTO.getFlavors())
-				.filter(flavors -> !flavors.isEmpty())
+				.filter(flavors -> ! flavors.isEmpty())
 				.ifPresent(flavors -> {
-					flavors.forEach(dishFlavor -> dishFlavor.setDishId(dishDTO.getId()));
+					flavors.forEach(dishFlavor -> dishFlavor.setDishId(dishId));
 					dishFlavorMapper.insert(flavors);
 				});
+	}
+
+	/**
+	 * 菜品起售停售
+	 * <p>
+	 * 该方法用于根据给定的状态和菜品ID，启动或停止菜品的销售。
+	 * 如果是停售操作，还需要将包含当前菜品的套餐也停售。
+	 *
+	 * @param status 菜品状态，1表示起售，0表示停售
+	 * @param id     菜品ID
+	 */
+	@Override
+	@Transactional
+	public void startOrStop(Integer status, Long id) {
+		// 修改菜品状态
+		Dish dish = Dish.builder()
+				.id(id)
+				.status(status)
+				.build();
+		dishMapper.updateById(dish);
+
+		if (StatusConstant.DISABLE.equals(status)) {
+			// 如果是停售操作，还需要将包含当前菜品的套餐也停售
+			List<Long> setmealIds = setmealDishMapper.selectList(
+							new LambdaQueryWrapper<SetmealDish>()
+									.eq(SetmealDish::getDishId, id)
+					).stream()
+					.map(SetmealDish::getSetmealId)
+					.distinct()
+					.collect(Collectors.toList());
+
+			Optional.of(setmealIds)
+					.filter(ids -> ! ids.isEmpty())
+					.ifPresent(ids -> {
+						ids.forEach(setmealId -> {
+							Setmeal setmeal = Setmeal.builder()
+									.id(setmealId)
+									.status(StatusConstant.DISABLE)
+									.build();
+							setmealMapper.updateById(setmeal);
+						});
+					});
+		}
 	}
 
 	/**
@@ -147,7 +190,7 @@ public class DishServiceImpl implements DishService {
 
 		// 构建查询条件
 		LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
-		queryWrapper.like(dishPageQueryDTO.getName() != null && !dishPageQueryDTO.getName().isEmpty(), Dish::getName, dishPageQueryDTO.getName())
+		queryWrapper.like(dishPageQueryDTO.getName() != null && ! dishPageQueryDTO.getName().isEmpty(), Dish::getName, dishPageQueryDTO.getName())
 				.eq(dishPageQueryDTO.getCategoryId() != null, Dish::getCategoryId, dishPageQueryDTO.getCategoryId())
 				.eq(dishPageQueryDTO.getStatus() != null, Dish::getStatus, dishPageQueryDTO.getStatus())
 				.orderByDesc(Dish::getCreateTime);
@@ -185,5 +228,20 @@ public class DishServiceImpl implements DishService {
 			BeanUtils.copyProperties(dish, this);
 			setFlavors(dishFlavors);
 		}};
+	}
+
+	/**
+	 * 根据分类id查询菜品
+	 *
+	 * @param categoryId 分类ID
+	 * @return 返回菜品列表
+	 */
+	@Override
+	public List<Dish> list(Long categoryId) {
+		return dishMapper.selectList(
+				new LambdaQueryWrapper<Dish>()
+						.eq(Dish::getCategoryId, categoryId)
+						.eq(Dish::getStatus, StatusConstant.ENABLE)
+		);
 	}
 }

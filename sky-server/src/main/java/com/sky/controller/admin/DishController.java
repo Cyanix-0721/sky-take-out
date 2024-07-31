@@ -2,6 +2,7 @@ package com.sky.controller.admin;
 
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
@@ -75,6 +76,22 @@ public class DishController {
 	}
 
 	/**
+	 * 菜品起售停售
+	 * <p>
+	 * 该方法用于根据给定的状态和菜品ID，启动或停止菜品的销售。
+	 *
+	 * @param status 菜品状态，1表示起售，0表示停售
+	 * @param id     菜品ID
+	 * @return 返回操作结果
+	 */
+	@PostMapping("/status/{status}")
+	@ApiOperation("菜品起售停售")
+	public Result<String> startOrStop(@PathVariable Integer status, @RequestParam Long id) {
+		dishService.startOrStop(status, id);
+		return Result.success();
+	}
+
+	/**
 	 * 菜品分页查询
 	 * <p>
 	 * 该方法用于分页查询菜品信息。
@@ -104,5 +121,20 @@ public class DishController {
 		log.info("根据id查询菜品：{}", id);
 		DishVO dishVO = dishService.getByIdWithFlavor(id);
 		return Result.success(dishVO);
+	}
+
+	/**
+	 * 根据分类id查询菜品
+	 * <p>
+	 * 该方法用于根据给定的分类ID查询菜品信息。
+	 *
+	 * @param categoryId 分类ID
+	 * @return 返回包含菜品列表的操作结果
+	 */
+	@GetMapping("/list")
+	@ApiOperation("根据分类id查询菜品")
+	public Result<List<Dish>> list(Long categoryId) {
+		List<Dish> list = dishService.list(categoryId);
+		return Result.success(list);
 	}
 }
