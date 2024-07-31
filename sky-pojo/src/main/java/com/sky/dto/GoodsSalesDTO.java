@@ -1,5 +1,7 @@
 package com.sky.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,10 +13,12 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ApiModel(description = "商品销售数据传输对象")
 public class GoodsSalesDTO implements Serializable {
-    //商品名称
+
+    @ApiModelProperty(value = "商品名称", example = "苹果")
     private String name;
 
-    //销量
+    @ApiModelProperty(value = "销量", example = "100")
     private Integer number;
 }
