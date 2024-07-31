@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 菜品管理
  */
@@ -36,6 +38,22 @@ public class DishController {
 	public Result<Void> save(@RequestBody DishDTO dishDTO) {
 		log.info("新增菜品：{}", dishDTO);
 		dishService.saveWithFlavor(dishDTO); // 后续步骤开发
+		return Result.success();
+	}
+
+	/**
+	 * 菜品批量删除
+	 * <p>
+	 * 该方法用于批量删除菜品信息。
+	 *
+	 * @param ids 包含要删除的菜品ID列表
+	 * @return 返回操作结果
+	 */
+	@DeleteMapping
+	@ApiOperation("菜品批量删除")
+	public Result<Void> delete(@RequestParam List<Long> ids) {
+		log.info("菜品批量删除：{}", ids);
+		dishService.deleteBatch(ids); // 后续步骤实现
 		return Result.success();
 	}
 

@@ -4,6 +4,8 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.result.PageResult;
 
+import java.util.List;
+
 public interface DishService {
 
 	/**
@@ -16,6 +18,13 @@ public interface DishService {
 	 * @param dishDTO 包含菜品和口味信息的数据传输对象
 	 */
 	void saveWithFlavor(DishDTO dishDTO);
+
+	/**
+	 * 菜品批量删除
+	 *
+	 * @param ids 包含要删除的菜品ID列表
+	 */
+	void deleteBatch(List<Long> ids);
 
 	/**
 	 * 菜品分页查询
