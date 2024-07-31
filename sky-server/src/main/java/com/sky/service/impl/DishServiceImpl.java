@@ -1,11 +1,16 @@
 package com.sky.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sky.dto.DishDTO;
+import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
+import com.sky.result.PageResult;
 import com.sky.service.DishService;
+import com.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -52,5 +58,38 @@ public class DishServiceImpl implements DishService {
 			// 向口味表插入n条数据
 			dishFlavorMapper.insert(flavors); // 后绪步骤实现
 		}
+	}
+
+	/**
+	 * 菜品分页查询
+	 * <p>
+	 * 该方法用于分页查询菜品信息。
+	 *
+	 * @param dishPageQueryDTO 包含分页查询条件的数据传输对象
+	 * @return 返回包含分页结果的操作结果
+	 */
+	public PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO) {
+		// 创建分页对象
+		Page<Dish> page = new Page<>(dishPageQueryDTO.getPage(), dishPageQueryDTO.getPageSize());
+
+		// 构建查询条件
+		LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
+		queryWrapper.like(dishPageQueryDTO.getName() != null && !dishPageQueryDTO.getName().isEmpty(), Dish::getName, dishPageQueryDTO.getName())
+				.eq(dishPageQueryDTO.getCategoryId() != null, Dish::getCategoryId, dishPageQueryDTO.getCategoryId())
+				.eq(dishPageQueryDTO.getStatus() != null, Dish::getStatus, dishPageQueryDTO.getStatus())
+				.orderByDesc(Dish::getCreateTime);
+
+		// 执行查询
+		Page<Dish> resultPage = dishMapper.selectPage(page, queryWrapper);
+
+		// 将结果转换为DishVO列表
+		List<DishVO> dishVOList = resultPage.getRecords().stream().map(dish -> {
+			DishVO dishVO = new DishVO();
+			BeanUtils.copyProperties(dish, dishVO);
+			return dishVO;
+		}).collect(Collectors.toList());
+
+		// 返回分页结果
+		return new PageResult(resultPage.getTotal(), dishVOList);
 	}
 }

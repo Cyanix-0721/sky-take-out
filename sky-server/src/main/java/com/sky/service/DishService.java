@@ -1,6 +1,8 @@
 package com.sky.service;
 
 import com.sky.dto.DishDTO;
+import com.sky.dto.DishPageQueryDTO;
+import com.sky.result.PageResult;
 
 public interface DishService {
 
@@ -13,5 +15,15 @@ public interface DishService {
 	 *
 	 * @param dishDTO 包含菜品和口味信息的数据传输对象
 	 */
-	public void saveWithFlavor(DishDTO dishDTO);
+	void saveWithFlavor(DishDTO dishDTO);
+
+	/**
+	 * 菜品分页查询
+	 * <p>
+	 * 该方法用于分页查询菜品信息。
+	 *
+	 * @param dishPageQueryDTO 包含分页查询条件的数据传输对象
+	 * @return 返回包含分页结果的操作结果
+	 */
+	PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO);
 }
