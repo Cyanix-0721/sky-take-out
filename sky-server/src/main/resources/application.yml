@@ -47,11 +47,16 @@ knife4j:
     concat: 我
     version: v2.0
     group:
-      sky:
-        group-name: sky
+      admin:
+        group-name: admin
         api-rule: package
         api-rule-resources:
-          - com.sky.controller
+          - com.sky.controller.admin
+      user:
+        group-name: user
+        api-rule: package
+        api-rule-resources:
+          - com.sky.controller.user
 
 sky:
   jwt:
