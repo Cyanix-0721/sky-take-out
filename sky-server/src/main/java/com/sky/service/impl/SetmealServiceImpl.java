@@ -16,6 +16,7 @@ import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.SetmealService;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -203,6 +204,23 @@ public class SetmealServiceImpl implements SetmealService {
 	}
 
 	/**
+	 * 条件查询
+	 * <p>
+	 * 该方法用于根据传入的Setmeal对象的属性进行条件查询。
+	 * 它接收一个Setmeal对象，并返回一个包含符合条件的套餐列表。
+	 *
+	 * @param setmeal 包含查询条件Setmeal对象
+	 * @return 返回一个包含符合条件的套餐List\<Setmeal\>对象
+	 */
+	@Override
+	public List<Setmeal> list(Setmeal setmeal) {
+		return setmealMapper.selectList(new LambdaQueryWrapper<>(setmeal)
+				.like(setmeal.getName() != null, Setmeal::getName, setmeal.getName())
+				.eq(setmeal.getCategoryId() != null, Setmeal::getCategoryId, setmeal.getCategoryId())
+				.eq(setmeal.getStatus() != null, Setmeal::getStatus, setmeal.getStatus()));
+	}
+
+	/**
 	 * 根据id查询套餐和套餐菜品关系
 	 * <p>
 	 * 该方法用于根据套餐ID查询套餐信息及其关联的菜品数据。
@@ -220,5 +238,18 @@ public class SetmealServiceImpl implements SetmealService {
 			BeanUtils.copyProperties(setmeal, this);
 			setSetmealDishes(setmealDishes);
 		}};
+	}
+
+	/**
+	 * 根据套餐id查询菜品选项
+	 * <p>
+	 * 该方法用于根据套餐id查询菜品选项。它接收一个套餐id，并返回一个包含符合条件的菜品选项列表。
+	 *
+	 * @param setmealId 套餐的id
+	 * @return 返回一个包含符合条件的菜品List\<DishItemVO\>对象
+	 */
+	@Override
+	public List<DishItemVO> getDishItemById(Long setmealId) {
+		return setmealMapper.getDishItemBySetmealId(setmealId);
 	}
 }

@@ -59,6 +59,7 @@ public class UserController {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put(JwtClaimsConstant.USER_ID, user.getId());
 		String token = JwtUtil.createJWT(jwtProperties.getUserSecretKey(), jwtProperties.getUserTtl(), claims);
+		log.info("生成的token:{}", token);
 
 		// 构建 UserLoginVO 对象
 		UserLoginVO userLoginVO = UserLoginVO.builder()

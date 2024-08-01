@@ -2,7 +2,9 @@ package com.sky.service;
 
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
+import com.sky.entity.Setmeal;
 import com.sky.result.PageResult;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.SetmealVO;
 
 import java.util.List;
@@ -61,6 +63,17 @@ public interface SetmealService {
 	PageResult pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
 
 	/**
+	 * 条件查询
+	 * <p>
+	 * 该方法用于根据给定的条件查询套餐信息。它接收一个包含查询条件的Setmeal对象，
+	 * 并返回一个包含符合条件的套餐列表。
+	 *
+	 * @param setmeal 包含查询条件的Setmeal对象
+	 * @return 返回一个包含符合条件的套餐List\<Setmeal\>对象
+	 */
+	List<Setmeal> list(Setmeal setmeal);
+
+	/**
 	 * 根据id查询套餐和关联的菜品数据
 	 * <p>
 	 * 该方法用于根据套餐ID查询套餐信息及其关联的菜品数据。
@@ -70,4 +83,13 @@ public interface SetmealService {
 	 */
 	SetmealVO getByIdWithDish(Long id);
 
+	/**
+	 * 根据id查询菜品选项
+	 * <p>
+	 * 该方法用于根据菜品ID查询菜品选项。它接收一个菜品ID，并返回一个包含菜品选项的列表。
+	 *
+	 * @param id 菜品的ID
+	 * @return 返回一个包含菜品选项的List\<DishItemVO\>对象
+	 */
+	List<DishItemVO> getDishItemById(Long id);
 }

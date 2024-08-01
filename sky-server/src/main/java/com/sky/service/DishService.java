@@ -76,4 +76,14 @@ public interface DishService {
 	 * @return 返回包含菜品列表的操作结果
 	 */
 	List<Dish> list(Long categoryId);
+
+	/**
+	 * 条件查询菜品和口味
+	 * <p>
+	 * 该方法用于根据给定的条件查询菜品及其对应的口味信息。
+	 *
+	 * @param dish 包含查询条件的Dish对象
+	 * @return 返回一个包含符合条件的菜品及其口味信息的List\<DishVO\>对象
+	 */
+	List<DishVO> listWithFlavor(Dish dish);
 }

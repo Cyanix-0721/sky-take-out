@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.dao.DishDAO;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
@@ -24,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,6 +43,8 @@ public class DishServiceImpl implements DishService {
 	private SetmealDishMapper setmealDishMapper;
 	@Autowired
 	private SetmealMapper setmealMapper;
+	@Autowired
+	private DishDAO dishDAO;
 
 	/**
 	 * 新增菜品和对应的口味
@@ -238,10 +243,38 @@ public class DishServiceImpl implements DishService {
 	 */
 	@Override
 	public List<Dish> list(Long categoryId) {
-		return dishMapper.selectList(
-				new LambdaQueryWrapper<Dish>()
-						.eq(Dish::getCategoryId, categoryId)
-						.eq(Dish::getStatus, StatusConstant.ENABLE)
-		);
+		Dish dish = Dish.builder()
+				.categoryId(categoryId)
+				.status(StatusConstant.ENABLE)
+				.build();
+		return dishDAO.list(dish);
+	}
+
+	/**
+	 * 条件查询菜品和口味
+	 * <p>
+	 * 该方法根据传入的菜品对象的条件查询菜品列表，并为每个菜品查询对应的口味信息。
+	 *
+	 * @param dish 包含查询条件的菜品对象
+	 * @return 返回包含菜品及其口味信息的列表
+	 */
+	@Override
+	public List<DishVO> listWithFlavor(Dish dish) {
+		// 根据条件查询菜品列表
+		List<Dish> dishList = dishDAO.list(dish);
+		
+		return dishList.stream().map(d -> {
+			// 创建一个DishVO对象并复制菜品属性
+			DishVO dishVO = new DishVO();
+			BeanUtils.copyProperties(d, dishVO);
+
+			// 根据菜品id查询对应的口味
+			List<DishFlavor> dishFlavors = dishFlavorMapper.selectList(
+					new LambdaQueryWrapper<DishFlavor>().eq(DishFlavor::getDishId, d.getId())
+			);
+			// 设置菜品的口味信息
+			dishVO.setFlavors(dishFlavors);
+			return dishVO;
+		}).collect(Collectors.toList());
 	}
 }
