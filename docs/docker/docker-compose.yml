@@ -25,6 +25,16 @@ services:
       - ${INIT_SQL}:/docker-entrypoint-initdb.d/init.sql
       - ${MYSQL_CONF}:/etc/mysql/conf.d/my.cnf
     network_mode: sky-take-out
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - sky_redis_data:/data
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    command: [ "redis-server", "--requirepass", "${REDIS_PASSWORD}" ]
+    network_mode: ${NETWORK_MODE}
 networks:
   sky-take-out:
     name: sky-take-out
@@ -39,3 +49,5 @@ volumes:
     name: sky_nginx_html
   sky_nginx_contrib:
     name: sky_nginx_contrib
+  sky_redis_data:
+    name: sky_redis_data
