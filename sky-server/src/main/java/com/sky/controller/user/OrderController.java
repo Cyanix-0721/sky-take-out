@@ -40,4 +40,19 @@ public class OrderController {
 		return Result.success(orderSubmitVO);
 	}
 
+	/**
+	 * 订单支付
+	 *
+	 * @param ordersPaymentDTO 包含订单支付信息的DTO对象
+	 * @return 返回订单支付视图对象
+	 * @throws Exception 如果支付过程中发生错误
+	 */
+	@PutMapping("/payment")
+	@ApiOperation("订单支付")
+	public Result<OrderPaymentVO> payment(@RequestBody OrdersPaymentDTO ordersPaymentDTO) throws Exception {
+		log.info("订单支付：{}", ordersPaymentDTO);
+		OrderPaymentVO orderPaymentVO = orderService.payment(ordersPaymentDTO);
+		log.info("生成预支付交易单：{}", orderPaymentVO);
+		return Result.success(orderPaymentVO);
+	}
 }
