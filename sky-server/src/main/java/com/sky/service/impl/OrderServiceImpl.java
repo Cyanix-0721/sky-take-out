@@ -148,7 +148,8 @@ public class OrderServiceImpl implements OrderService {
 //			throw new OrderBusinessException("该订单已支付");
 //		}
 
-		// 直接调用支付成功方法，模拟支付成功
+		// 正常流程返回待支付到前端，支付后调用 PayNotifyController的 /notify/paySuccess 接口
+		// 直接调用支付成功方法，模拟支付成功并返回到前端
 		paySuccess(ordersPaymentDTO.getOrderNumber());
 
 		// 创建一个新的JSONObject对象，用于存储支付结果
