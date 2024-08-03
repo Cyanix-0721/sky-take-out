@@ -1,5 +1,7 @@
 package com.sky.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -25,6 +27,7 @@ public class AddressBook implements Serializable {
 	@ApiModelProperty(value = "地址簿ID", example = "1")
 	private Long id;
 
+	@TableField(fill = FieldFill.INSERT_UPDATE)
 	@ApiModelProperty(value = "用户ID", example = "1")
 	private Long userId;
 

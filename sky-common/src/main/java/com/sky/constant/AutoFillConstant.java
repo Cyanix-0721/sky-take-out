@@ -19,4 +19,5 @@ public class AutoFillConstant {
 	public static final String UPDATE_TIME = "updateTime";
 	public static final String CREATE_USER = "createUser";
 	public static final String UPDATE_USER = "updateUser";
+	public static final String USER_ID = "userId";
 }
