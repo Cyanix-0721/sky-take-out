@@ -1,6 +1,6 @@
 package com.sky.entity;
 
-import com.baomidou.mybatisplus.annotation.Version;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -20,8 +20,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(description = "订单实体类")
-public class Orders implements Serializable {
-
+@TableName("`order`")
+public class Order implements Serializable {
 
 	/**
 	 * 订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消
@@ -52,6 +52,7 @@ public class Orders implements Serializable {
 	@ApiModelProperty(value = "订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消", example = "1", allowableValues = "1, 2, 3, 4, 5, 6")
 	private Integer status;
 
+	@TableField(fill = FieldFill.INSERT_UPDATE)
 	@ApiModelProperty(value = "下单用户ID", example = "1")
 	private Long userId;
 
@@ -76,14 +77,14 @@ public class Orders implements Serializable {
 	@ApiModelProperty(value = "备注", example = "请尽快送达")
 	private String remark;
 
-	@ApiModelProperty(value = "用户名", example = "张三")
-	private String userName;
-
 	@ApiModelProperty(value = "手机号", example = "13800138000")
 	private String phone;
 
 	@ApiModelProperty(value = "地址", example = "北京市朝阳区")
 	private String address;
+
+	@ApiModelProperty(value = "用户名", example = "张三")
+	private String userName;
 
 	@ApiModelProperty(value = "收货人", example = "李四")
 	private String consignee;

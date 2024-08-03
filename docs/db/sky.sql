@@ -186,9 +186,9 @@ DELETE FROM `employee`;
 INSERT INTO `employee` (`id`, `name`, `username`, `password`, `phone`, `sex`, `id_number`, `status`, `create_time`, `update_time`, `create_user`, `update_user`, `version`) VALUES
 	(1, '管理员', 'admin', 'e10adc3949ba59abbe56e057f20f883e', '13812312312', '1', '110101199001010047', 1, '2022-02-15 15:51:20', '2022-02-17 09:16:20', 10, 1, 1);
 
--- 导出  表 sky_take_out.orders 结构
-DROP TABLE IF EXISTS `orders`;
-CREATE TABLE IF NOT EXISTS `orders` (
+-- 导出  表 sky_take_out.order 结构
+DROP TABLE IF EXISTS `order`;
+CREATE TABLE IF NOT EXISTS `order` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
   `number` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL COMMENT '订单号',
   `status` int NOT NULL DEFAULT '1' COMMENT '订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消 7退款',
@@ -217,8 +217,8 @@ CREATE TABLE IF NOT EXISTS `orders` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin COMMENT='订单表';
 
--- 正在导出表  sky_take_out.orders 的数据：~0 rows (大约)
-DELETE FROM `orders`;
+-- 正在导出表  sky_take_out.order 的数据：~0 rows (大约)
+DELETE FROM `order`;
 
 -- 导出  表 sky_take_out.order_detail 结构
 DROP TABLE IF EXISTS `order_detail`;
