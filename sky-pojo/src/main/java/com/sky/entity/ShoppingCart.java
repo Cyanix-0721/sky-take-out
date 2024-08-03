@@ -32,6 +32,7 @@ public class ShoppingCart implements Serializable {
 	@ApiModelProperty(value = "名称", example = "宫保鸡丁")
 	private String name;
 
+	@TableField(fill = FieldFill.INSERT_UPDATE)
 	@ApiModelProperty(value = "用户ID", example = "1")
 	private Long userId;
 

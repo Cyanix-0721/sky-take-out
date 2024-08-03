@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Data
 @ApiModel(description = "订单提交数据传输对象")
-public class OrdersSubmitDTO implements Serializable {
+public class OrderSubmitDTO implements Serializable {
 
 	@ApiModelProperty(value = "地址簿ID", example = "2001")
 	private Long addressBookId;

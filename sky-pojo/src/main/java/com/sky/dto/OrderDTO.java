@@ -12,7 +12,7 @@ import java.util.List;
 
 @Data
 @ApiModel(description = "订单数据传输对象")
-public class OrdersDTO implements Serializable {
+public class OrderDTO implements Serializable {
 
 	@ApiModelProperty(value = "订单ID", example = "12345")
 	private Long id;

@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Data
 @ApiModel(description = "订单确认数据传输对象")
-public class OrdersConfirmDTO implements Serializable {
+public class OrderConfirmDTO implements Serializable {
 
 	@ApiModelProperty(value = "订单ID", example = "12345")
 	private Long id;

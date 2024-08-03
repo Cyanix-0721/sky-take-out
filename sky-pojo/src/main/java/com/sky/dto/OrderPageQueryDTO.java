@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 @ApiModel(description = "订单分页查询数据传输对象")
-public class OrdersPageQueryDTO implements Serializable {
+public class OrderPageQueryDTO implements Serializable {
 
 	@ApiModelProperty(value = "页码", example = "1")
 	private int page;
