@@ -89,6 +89,21 @@ public class OrderController {
 	}
 
 	/**
+	 * 用户催单
+	 *
+	 * @param id 订单ID
+	 * @return 包含催单结果的Result对象
+	 */
+	@GetMapping("/reminder/{id}")
+	@ApiOperation("用户催单")
+	public Result<Void> reminder(@PathVariable("id") Long id) {
+		// 调用订单服务的reminder方法，处理催单请求
+		orderService.reminder(id);
+		// 返回包含催单结果的成功响应
+		return Result.success();
+	}
+
+	/**
 	 * 用户取消订单
 	 *
 	 * @param id 订单ID
@@ -118,4 +133,5 @@ public class OrderController {
 		// 返回包含再来一单结果的成功响应
 		return Result.success();
 	}
+
 }

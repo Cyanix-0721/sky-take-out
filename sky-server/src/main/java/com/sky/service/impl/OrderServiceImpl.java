@@ -27,6 +27,7 @@ import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
+import com.sky.websocket.MyWebSocketHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,19 +53,21 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private OrderDetailMapper orderDetailMapper;
 	@Autowired
+	private OrderDAO orderDAO;
+	@Autowired
+	private OrderDetailDAO orderDetailDAO;
+	@Autowired
 	private ShoppingCartMapper shoppingCartMapper;
 	@Autowired
 	private ShoppingCartDAO shoppingCartDAO;
 	@Autowired
 	private AddressBookMapper addressBookMapper;
 	@Autowired
+	MyWebSocketHandler myWebSocketHandler;
+	@Autowired
 	private UserMapper userMapper;
 	@Autowired
 	private WeChatPayUtil weChatPayUtil;
-	@Autowired
-	private OrderDAO orderDAO;
-	@Autowired
-	private OrderDetailDAO orderDetailDAO;
 
 	@Value("${sky.shop.address}")
 	private String shopAddress;
@@ -210,6 +213,15 @@ public class OrderServiceImpl implements OrderService {
 				.build();
 
 		orderMapper.updateById(order);
+
+		// 支付成功后，向后台客户端发送消息
+		Map<String, Object> map = new HashMap<>();
+		map.put("type", 1); // 消息类型，1表示来单提醒
+		map.put("orderId", order.getId());
+		map.put("content", "订单号：" + outTradeNo);
+
+		// 通过WebSocket实现来单提醒，向客户端浏览器推送消息
+		myWebSocketHandler.sendToAllClient(JSON.toJSONString(map));
 	}
 
 	/**
@@ -273,6 +285,27 @@ public class OrderServiceImpl implements OrderService {
 		orderVO.setOrderDetailList(orderDetailList);
 
 		return orderVO;
+	}
+
+	/**
+	 * 用户催单
+	 *
+	 * @param id 订单ID
+	 */
+	@Override
+	public void reminder(Long id) {
+		// 查询订单是否存在
+		Order order = Optional.ofNullable(orderMapper.selectById(id))
+				.orElseThrow(() -> new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND));
+
+		// 基于WebSocket实现催单
+		Map<String, Object> map = new HashMap<>();
+		map.put("type", 2); // 2代表用户催单
+		map.put("orderId", id);
+		map.put("content", "订单号：" + order.getNumber());
+
+		// 通过WebSocket向所有客户端发送催单消息
+		myWebSocketHandler.sendToAllClient(JSON.toJSONString(map));
 	}
 
 	/**
