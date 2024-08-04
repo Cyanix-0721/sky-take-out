@@ -1,7 +1,9 @@
 package com.sky.dao;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.sky.dto.GoodsSalesDTO;
 import com.sky.dto.OrderPageQueryDTO;
 import com.sky.entity.Order;
 import com.sky.mapper.OrderMapper;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 public class OrderDAO {
@@ -41,8 +45,40 @@ public class OrderDAO {
 	 */
 	public List<Order> getByStatusAndOrderTimeLT(Integer status, LocalDateTime orderTime) {
 		LambdaQueryWrapper<Order> queryWrapper = new LambdaQueryWrapper<>();
+
 		queryWrapper.eq(Order::getStatus, status)
 				.lt(Order::getOrderTime, orderTime);
+
 		return orderMapper.selectList(queryWrapper);
+	}
+
+	/**
+	 * 根据动态条件统计营业额
+	 *
+	 * @param map 包含查询条件的映射，其中可能包含以下键：
+	 *            - "status" (Integer): 订单状态
+	 *            - "begin" (LocalDateTime): 开始时间
+	 *            - "end" (LocalDateTime): 结束时间
+	 * @return 符合条件的订单总金额
+	 */
+	public Double sumByMap(Map<String, Object> map) {
+		return orderMapper.selectList(LQW_stat_beg_end(map))
+				.stream()
+				.mapToDouble(order -> order.getAmount().doubleValue())
+				.sum();
+	}
+
+	public Integer countByMap(Map<String, Object> map) {
+		return Math.toIntExact(orderMapper.selectCount(LQW_stat_beg_end(map)));
+	}
+
+	public LambdaQueryWrapper<Order> LQW_stat_beg_end(Map<String, Object> map) {
+		LambdaQueryWrapper<Order> queryWrapper = new LambdaQueryWrapper<>();
+
+		queryWrapper
+				.eq(map.get("status") != null, Order::getStatus, map.get("status"))
+				.ge(map.get("begin") != null, Order::getOrderTime, map.get("begin"))
+				.le(map.get("end") != null, Order::getOrderTime, map.get("end"));
+		return queryWrapper;
 	}
 }
