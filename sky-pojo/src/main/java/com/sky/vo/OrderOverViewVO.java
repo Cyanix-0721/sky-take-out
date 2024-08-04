@@ -1,5 +1,7 @@
 package com.sky.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,19 +16,21 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel(description = "订单概览数据")
 public class OrderOverViewVO implements Serializable {
-    //待接单数量
-    private Integer waitingOrders;
 
-    //待派送数量
-    private Integer deliveredOrders;
+	@ApiModelProperty(value = "待接单数量", example = "10")
+	private Integer waitingOrder;
 
-    //已完成数量
-    private Integer completedOrders;
+	@ApiModelProperty(value = "待派送数量", example = "5")
+	private Integer deliveredOrder;
 
-    //已取消数量
-    private Integer cancelledOrders;
+	@ApiModelProperty(value = "已完成数量", example = "20")
+	private Integer completedOrder;
 
-    //全部订单
-    private Integer allOrders;
+	@ApiModelProperty(value = "已取消数量", example = "2")
+	private Integer cancelledOrder;
+
+	@ApiModelProperty(value = "全部订单", example = "37")
+	private Integer allOrder;
 }
