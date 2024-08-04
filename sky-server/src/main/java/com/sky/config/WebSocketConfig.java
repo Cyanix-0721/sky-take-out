@@ -1,25 +1,27 @@
 package com.sky.config;
 
-import org.springframework.context.annotation.Bean;
+import com.sky.websocket.MyWebSocketHandler;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.socket.server.standard.ServerEndpointExporter;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 /**
- * WebSocket配置类，用于注册WebSocket的Bean
+ * WebSocket配置类，用于注册WebSocket处理器
  */
 @Configuration
-public class WebSocketConfig {
+@EnableWebSocket
+public class WebSocketConfig implements WebSocketConfigurer {
 
 	/**
-	 * 创建并返回一个ServerEndpointExporter Bean
-	 * <p>
-	 * ServerEndpointExporter Bean用于自动注册使用@ServerEndpoint注解声明的WebSocket端点
+	 * 注册WebSocket处理器
 	 *
-	 * @return ServerEndpointExporter Bean
+	 * @param registry 用于注册处理器的WebSocketHandlerRegistry
 	 */
-	@Bean
-	public ServerEndpointExporter serverEndpointExporter() {
-		return new ServerEndpointExporter();
+	@Override
+	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+		// 注册MyWebSocketHandler，指定端点为"/ws/{sid}"，允许所有来源
+		registry.addHandler(new MyWebSocketHandler(), "/ws/{sid}")
+				.setAllowedOrigins("*");
 	}
-
 }
