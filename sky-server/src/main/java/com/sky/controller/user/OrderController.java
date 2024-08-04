@@ -64,7 +64,6 @@ public class OrderController {
 	 * @param status   订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消
 	 * @return 包含分页结果的Result对象
 	 */
-	//TODO 超时订单仍然属于待付款订单，可考虑引入MQ，定时任务，定时检查订单状态，超时则取消订单
 	@GetMapping("/historyOrders")
 	@ApiOperation("历史订单查询")
 	public Result<PageResult> page(int page, int pageSize, Integer status) {

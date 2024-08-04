@@ -8,6 +8,9 @@ import com.sky.mapper.OrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Repository
 public class OrderDAO {
 	@Autowired
@@ -27,5 +30,19 @@ public class OrderDAO {
 				.orderByDesc(Order::getOrderTime);
 
 		return orderMapper.selectPage(page, queryWrapper);
+	}
+
+	/**
+	 * 根据状态和下单时间查询订单
+	 *
+	 * @param status    订单状态
+	 * @param orderTime 下单时间
+	 * @return 符合条件的订单列表
+	 */
+	public List<Order> getByStatusAndOrderTimeLT(Integer status, LocalDateTime orderTime) {
+		LambdaQueryWrapper<Order> queryWrapper = new LambdaQueryWrapper<>();
+		queryWrapper.eq(Order::getStatus, status)
+				.lt(Order::getOrderTime, orderTime);
+		return orderMapper.selectList(queryWrapper);
 	}
 }
