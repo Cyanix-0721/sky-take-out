@@ -14,7 +14,7 @@
 
 部署步骤: 
 
-- `git clone https://github.com/wryyyy4444/sky-take-out`
+- `git clone https://github.com/Cyanix-0721/sky-take-out`
 - `cd docs/docker`
 - `docker compose --env-file .env.dev up` 启动开发环境
 - swagger文档地址：`http://localhost:8080/doc.html`
